@@ -1,3 +1,7 @@
+Versione in Italiano [qui](README_it.md)
+
+---
+
 # 🌡️ Urban Heat Island Analysis – Bologna
 
 This project analyzes Urban Heat Island (UHI) effects in the city of Bologna (Italy) by processing and integrating satellite data (Landsat, MODIS) with spatial indicators like [NDVI](https://it.wikipedia.org/wiki/Normalized_Difference_Vegetation_Index), LST - Land Surface Temperature, [Albedo](https://en.wikipedia.org/wiki/Albedo), and derived composite indices.
