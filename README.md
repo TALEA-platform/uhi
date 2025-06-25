@@ -1,4 +1,4 @@
-[🇮🇹 Versione in italiano qui](#italian)
+[🇮🇹 Versione in italiano qui](#-versione-in-italiano)
 ---
 
 # 🌡️ Urban Heat Island Analysis – Bologna
