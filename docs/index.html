@@ -47,13 +47,13 @@
       <label for="layerSelect" class="form-label">Scegli il layer:</label>
       <select class="form-select" id="layerSelect">
         <option value="">-- Nessuno --</option>
-        <option value="z_score_class">Z-Score</option>
-        <option value="ndvi_class">NDVI</option>
-        <option value="albedo_class">Albedo</option>
-        <option value="heat_ret_class">Heat Retention</option>
-        <option value="heat_veg_class">Heat Vegetation</option>
-        <option value="uhei_class">UHEI</option>
-        <option value="delta_lst_class">Delta LST</option>
+        <option value="z_score_class">📊🌡️ Scostamento dalla media</option>
+        <option value="delta_lst_class">🌞🌙🌡️ Escursione termica della superficie</option>
+        <option value="ndvi_class">🌿🌱 Presenza di verde</option>
+        <option value="albedo_class">☀️⬜⬛ Riflettività della superficie</option>
+        <option value="heat_ret_class">🌡️⏳ Accumulo di calore</option>
+        <option value="heat_veg_class">🔥🌿 Calore/Vegetazione</option>
+        <option value="uhei_class">🌇🔥 Esposizione complessiva</option>
       </select>
     </div>
     <div class="mb-2">
@@ -118,13 +118,13 @@
     };
 
     const layerDescriptions = {
-      z_score_class: { title: "Indice di deviazione (Z-Score)", description: "Indica quanto una zona si discosta dalla media delle temperature urbane.", labels: ["Molto più fredda", "Più fredda", "Fredda", "Leggermente fredda", "Nella media", "Leggermente calda", "Calda", "Più calda", "Molto calda", "Estremamente calda"] },
-      ndvi_class: { title: "Indice di vegetazione NDVI", description: "Misura la quantità di vegetazione presente (valori alti = più verde).", labels: ["Assente", "Poca", "Media", "Molta"] },
-      albedo_class: { title: "Albedo Superficiale", description: "Misura la riflettanza della superficie: bianco riflette, nero assorbe calore.", labels: ["Molto riflettente", "Riflettente", "Assorbente", "Molto assorbente"] },
-      heat_ret_class: { title: "Accumulo di calore", description: "Indica quanto una superficie tende a trattenere il calore ricevuto durante il giorno.<br/>Dipende dalla presenza di vegetazione e da quanto la superficie riesce a riflettere la luce del sole.", labels: ["Molto bassa", "Bassa", "Moderata", "Media", "Alta", "Molto alta", "Estrema"] },
-      heat_veg_class: { title: "Effetto vegetazione sul calore", description: "Effetto mitigante della vegetazione sulle temperature urbane.", labels: ["Basso", "Moderato", "Alto", "Molto alto"] },
-      uhei_class: { title: "Indice UHEI", description: "Classificazione dell'intensità dell'isola di calore urbana.", labels: ["Bassa", "Media", "Alta", "Molto alta"] },
-      delta_lst_class: { title: "Differenza LST Giorno/Notte", description: "Variazione della temperatura superficiale tra giorno e notte.", labels: ["Freddo notte", "Meno caldo", "Neutro", "Leggero caldo", "Moderato caldo", "Caldo", "Abbastanza caldo", "Molto caldo", "Estremo", "Estremamente caldo"] }
+      z_score_class: { title: "📊🌡️ Scostamento dalla media", description: "Z-Score/Deviazione \nIndica quanto una zona si discosta dalla media delle temperature urbane.", labels: ["Molto più fredda", "Più fredda", "Fredda", "Leggermente fredda", "Nella media", "Leggermente calda", "Calda", "Più calda", "Molto calda", "Estremamente calda"] },
+      ndvi_class: { title: "🌿🌱 Presenza di verde", description: "NDVI - Normalized Difference Vegetation Index\nMisura la quantità di vegetazione presente (valori alti = più verde).", labels: ["Assente", "Poca", "Media", "Molta"] },
+      albedo_class: { title: "☀️⬜⬛ Riflettività della superficie", description: "Albedo\nIndica quanto una superficie riflette la luce solare: bianco riflette, nero assorbe.", labels: ["Molto riflettente", "Riflettente", "Assorbente", "Molto assorbente"] },
+      heat_ret_class: { title: "🌡️⏳ Accumulo di calore", description: "Heat Retention Index\nQuanto una superficie trattiene il calore nel tempo.<br/>Indica dove il calore viene assorbito e rilasciato lentamente", labels: ["Molto bassa", "Bassa", "Moderata", "Media", "Alta", "Molto alta", "Estrema"] },
+      heat_veg_class: { title: "🔥🌿 Calore/Vegetazione", description: "Heat-Vegetation Index\nRelazione tra calore e presenza di vegetazione.<br/>Individua dove fa caldo e manca il verde", labels: ["Basso", "Moderato", "Alto", "Molto alto"] },
+      uhei_class: { title: "🌇🔥 Esposizione complessiva", description: "UHEI (Urban Heat Exposure Index)\nEsposizione complessiva al calore urbano.<br/>Dove il rischio da calore urbano è più elevato (vegetazione e assorbimento)", labels: ["Bassa", "Media", "Alta", "Molto alta"] },
+      delta_lst_class: { title: "🌞🌙🌡️ Escursione termica della superficie", description: "Variazione della temperatura superficiale tra giorno e notte.", labels: ["Freddo notte", "Meno caldo", "Neutro", "Leggero caldo", "Moderato caldo", "Caldo", "Molto caldo", "Estremo", "Estremamente caldo"] }
     };
 
     let currentLayer = null;
