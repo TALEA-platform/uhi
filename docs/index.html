@@ -6,22 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="topojson/../201236683.png" />
+  <link rel="icon" type="image/png" href="images/logo.png" />
   <style>
     body, html { height: 100%; margin: 0; }
     header {
-      background-color: #ffffff; /*#0071bc;*/
-      color: black; /**white;*/
+      background-color: #ffffff;
+      color: black;
       padding: 1rem 2rem;
       display: flex;
       align-items: center;
       gap: 1rem;
       font-size: 1.5rem;
     }
-    header img {
-      height: 40px;
-    }
-    #map { position: absolute; top: 60px; bottom: 0; width: 100%; }
+    header img { height: 40px; }
+    #map { position: absolute; top: 60px; bottom: 30px; width: 100%; }
     .controls {
       position: absolute;
       top: 70px;
@@ -34,15 +32,23 @@
       max-width: 300px;
       border-left: 5px solid #ffc627;
     }
-    .legend {
-      margin-top: 10px;
-    }
+    .legend { margin-top: 10px; }
     .legend-color {
       display: inline-block;
       width: 20px;
       height: 20px;
       margin-right: 5px;
       border: 1px solid #ccc;
+    }
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: #f8f9fa;
+      color: #333;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      text-align: center;
     }
   </style>
 </head>
@@ -52,6 +58,7 @@
     <span>Talea - isole di calore di Bologna</span>
   </header>
   <div id="map"></div>
+  <button class="btn btn-outline-secondary position-absolute m-2" style="top:70px;right:10px;z-index:2;" id="toggleControls">☰</button>
   <div class="controls">
     <div class="mb-2">
       I dati sono calcolati dai satelliti Landsat e Modis per l'estate 2024
@@ -84,125 +91,12 @@
     </div>
     <div id="legend" class="legend"></div>
   </div>
-
-  <script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
-  <script src="https://unpkg.com/topojson@3"></script>
-  <script>
-    const map = new maplibregl.Map({
-      container: 'map',
-      style: {
-        version: 8,
-        sources: {
-          osm: {
-            type: 'raster',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '© OpenStreetMap contributors'
-          },
-          ortofoto: {
-            type: 'raster',
-            tiles: ['https://sitmappe.comune.bologna.it/tms/tileserver/Ortofoto2024/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '© Comune di Bologna, 2024'
-          }
-        },
-        layers: [{ id: 'base-osm', type: 'raster', source: 'osm' }]
-      },
-      center: [11.34, 44.49],
-      zoom: 13
-    });
-
-    map.addControl(new maplibregl.NavigationControl(), 'top-right');
-    map.addControl(new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: true }), 'top-right');
-
-    const layerColors = {
-      z_score_class: ["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8", "#fee090", "#fdae61", "#f46d43", "#d73027", "#a50026"],
-      ndvi_class: ["#ffffcc", "#c2e699", "#78c679", "#006837"],
-      albedo_class: ["#ffffff", "#cccccc", "#999999", "#000000"],
-      heat_ret_class: ["#ffffe0", "#ffe08c", "#ffc04d", "#ff9933", "#ff6600", "#cc0000", "#800000"],
-      heat_veg_class: ["#ffffcc", "#ffeda0", "#feb24c", "#f03b20"],
-      uhei_class: ["#ffffcc", "#ffeda0", "#fd8d3c", "#bd0026"],
-      delta_lst_class: ["#30123b", "#4662d8", "#35abf8", "#1be5b5", "#74fe5d", "#c9ef34", "#fbb938", "#f56918", "#c92903", "#7a0403"]
-    };
-
-    const layerDescriptions = {
-      z_score_class: { title: "📊🌡️ Scostamento dalla media", description: "Indica quanto una zona si discosta dalla media delle temperature urbane.", labels: ["Molto più fredda", "Più fredda", "Fredda", "Leggermente fredda", "Nella media", "Leggermente calda", "Calda", "Più calda", "Molto calda", "Estremamente calda"] },
-      ndvi_class: { title: "🌿🌱 Presenza di verde", description: "Misura la quantità di vegetazione presente (valori alti = più verde).", labels: ["Assente", "Poca", "Media", "Molta"] },
-      albedo_class: { title: "☀️⬛⬛ Riflettività della superficie", description: "Indica quanto una superficie riflette la luce solare: bianco riflette, nero assorbe.", labels: ["Molto riflettente", "Riflettente", "Assorbente", "Molto assorbente"] },
-      heat_ret_class: { title: "🌡️⏳ Accumulo di calore", description: "Quanto una superficie trattiene il calore nel tempo. Indica dove il calore viene assorbito e rilasciato lentamente.", labels: ["Molto bassa", "Bassa", "Moderata", "Media", "Alta", "Molto alta", "Estrema"] },
-      heat_veg_class: { title: "🔥🌿 Calore/Vegetazione", description: "Relazione tra calore e presenza di vegetazione. Individua dove fa caldo e manca il verde.", labels: ["Basso", "Moderato", "Alto", "Molto alto"] },
-      uhei_class: { title: "🌇🔥 Esposizione complessiva", description: "Esposizione complessiva al calore urbano. Dove il rischio da calore urbano è più elevato.", labels: ["Bassa", "Media", "Alta", "Molto alta"] },
-      delta_lst_class: { title: "🌞🌙🌡️ Escursione termica della superficie", description: "Variazione della temperatura superficiale tra giorno e notte.", labels: ["Freddo notte", "Meno caldo", "Neutro", "Leggero caldo", "Moderato caldo", "Caldo", "Molto caldo", "Estremo", "Estremamente caldo"] }
-    };
-
-    let currentLayer = null;
-
-    document.getElementById('layerSelect').addEventListener('change', async function () {
-      if (currentLayer) {
-        if (map.getLayer(currentLayer)) map.removeLayer(currentLayer);
-        if (map.getSource(currentLayer)) map.removeSource(currentLayer);
-        document.getElementById('legend').innerHTML = '';
-        currentLayer = null;
-      }
-      const layer = this.value;
-      if (!layer) return;
-      try {
-        const response = await fetch(`topojson/${layer}.topojson`);
-        const topo = await response.json();
-        const geojson = topojson.feature(topo, topo.objects[Object.keys(topo.objects)[0]]);
-        const colors = layerColors[layer];
-        map.addSource(layer, { type: 'geojson', data: geojson });
-        map.addLayer({
-          id: layer,
-          type: 'fill',
-          source: layer,
-          paint: {
-            'fill-color': ['match', ['get', 'class'], ...colors.flatMap((c, i) => [i, c]), '#000000'],
-            'fill-opacity': parseFloat(document.getElementById('opacityRange').value)
-          }
-        });
-        currentLayer = layer;
-        drawLegend(layer);
-      } catch (err) {
-        alert(`Errore nel caricamento del layer: ${err}`);
-      }
-    });
-
-    document.getElementById('opacityRange').addEventListener('input', function () {
-      if (currentLayer) {
-        map.setPaintProperty(currentLayer, 'fill-opacity', parseFloat(this.value));
-      }
-    });
-
-    document.querySelectorAll('input[name="basemap"]').forEach(r => {
-      r.addEventListener('change', function () {
-        const isOSM = this.value === 'osm';
-        map.setLayoutProperty('base-osm', 'visibility', isOSM ? 'visible' : 'none');
-        if (!map.getLayer('base-ortofoto')) {
-          map.addLayer({ id: 'base-ortofoto', type: 'raster', source: 'ortofoto' });
-        }
-        map.setLayoutProperty('base-ortofoto', 'visibility', isOSM ? 'none' : 'visible');
-      });
-    });
-
-    function drawLegend(layerId) {
-      const legend = document.getElementById('legend');
-      legend.innerHTML = '';
-      const { title, description, labels } = layerDescriptions[layerId];
-      const colors = layerColors[layerId];
-      const titleEl = document.createElement('strong');
-      titleEl.innerText = title;
-      legend.appendChild(titleEl);
-      const descEl = document.createElement('div');
-      descEl.classList.add('mb-2');
-      descEl.innerText = description;
-      legend.appendChild(descEl);
-      colors.forEach((color, i) => {
-        const div = document.createElement('div');
-        div.innerHTML = `<span class='legend-color' style='background:${color}'></span>${labels[i] || 'Classe ' + i}`;
-        legend.appendChild(div);
-      });
-    }
-  </script>
+  <footer>
+    Questa mappa è parte del progetto Talea, iniziativa per l'analisi climatica urbana e la mitigazione delle isole di calore.
+  </footer>
+<script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/topojson@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
