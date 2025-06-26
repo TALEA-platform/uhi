@@ -144,11 +144,21 @@ map.on('load', async () => {
     }
 
     const toggleButton = document.getElementById('toggleControls');
+    toggleButton.innerText = 'Nascondi';
     toggleButton.style.position = 'absolute';
     toggleButton.style.left = '10px';
     toggleButton.style.top = '60px';
     toggleButton.style.width = document.querySelector('.controls').offsetWidth + 'px';
     toggleButton.style.backgroundColor = '#ffffff';
+    toggleButton.style.border = '1px solid #ccc';
+    toggleButton.style.color = '#000';
+    toggleButton.style.transition = 'background-color 0.3s ease';
+    toggleButton.addEventListener('mouseenter', () => {
+        toggleButton.style.backgroundColor = '#e0f0ff';
+    });
+    toggleButton.addEventListener('mouseleave', () => {
+        toggleButton.style.backgroundColor = '#ffffff';
+    });
     toggleButton.style.zIndex = '2';
     // spostato in alto per evitare duplicazioni
     let controlsVisible = true;
@@ -157,6 +167,7 @@ map.on('load', async () => {
         legendEl.classList.toggle('d-none');
         legendEl.style.marginTop = '30px';
         controlsVisible = !controlsVisible;
+        toggleButton.innerText = controlsVisible ? 'Nascondi' : 'Mostra';
     });
 });
 function updateHash() {
