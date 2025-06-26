@@ -39,10 +39,11 @@
   </style>
 </head>
 <body>
-  <header>talea - isole di calore di Bologna</header>
+  <header>Talea - isole di calore di Bologna</header>
   <div id="map"></div>
   <div class="controls">
     <div class="mb-2">
+      I dati sono calcolati dai satelliti Landsat e Modis per l'estate 2024
       <label for="layerSelect" class="form-label">Scegli il layer:</label>
       <select class="form-select" id="layerSelect">
         <option value="">-- Nessuno --</option>
@@ -63,11 +64,11 @@
       <label class="form-label">Sfondo:</label><br />
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="basemap" value="osm" checked>
-        <label class="form-check-label">OSM</label>
+        <label class="form-check-label">OpenStreetMap</label>
       </div>
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="basemap" value="ortofoto">
-        <label class="form-check-label">Ortofoto</label>
+        <label class="form-check-label">Ortofoto Bologna 2024</label>
       </div>
     </div>
     <div id="legend" class="legend"></div>
@@ -90,7 +91,8 @@
           ortofoto: {
             type: 'raster',
             tiles: ['https://sitmappe.comune.bologna.it/tms/tileserver/Ortofoto2024/{z}/{x}/{y}.png'],
-            tileSize: 256
+            tileSize: 256,
+            attribution: '© Comune di Bologna, 2024'
           }
         },
         layers: [{ id: 'base-osm', type: 'raster', source: 'osm' }]
@@ -122,7 +124,7 @@
       heat_ret_class: { title: "Accumulo di calore", description: "Indica quanto una superficie trattiene calore nel tempo.", labels: ["Molto bassa", "Bassa", "Moderata", "Media", "Alta", "Molto alta", "Estrema"] },
       heat_veg_class: { title: "Effetto vegetazione sul calore", description: "Effetto mitigante della vegetazione sulle temperature urbane.", labels: ["Basso", "Moderato", "Alto", "Molto alto"] },
       uhei_class: { title: "Indice UHEI", description: "Classificazione dell'intensità dell'isola di calore urbana.", labels: ["Bassa", "Media", "Alta", "Molto alta"] },
-      delta_lst_class: { title: "Differenza LST Giorno/Notte", description: "Variazione della temperatura superficiale tra giorno e notte.", labels: ["Freddo notte", "Meno caldo", "Neutro", "Leggero caldo", "Moderato caldo", "Caldo", "Molto caldo", "Estremo", "Estremamente caldo"] }
+      delta_lst_class: { title: "Differenza LST Giorno/Notte", description: "Variazione della temperatura superficiale tra giorno e notte.", labels: ["Freddo notte", "Meno caldo", "Neutro", "Leggero caldo", "Moderato caldo", "Caldo", "Abbastanza caldo", "Molto caldo", "Estremo", "Estremamente caldo"] }
     };
 
     let currentLayer = null;
