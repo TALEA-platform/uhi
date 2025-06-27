@@ -58,7 +58,7 @@ map.on('load', async () => {
     const layerDescriptions = {
         z_score_class: { title: "📊🌡️ Scostamento dalla media", description: "Indica quanto una zona si discosta dalla media delle temperature urbane.", labels: ["Molto più fredda", "Più fredda", "Fredda", "Leggermente fredda", "Nella media", "Leggermente calda", "Calda", "Più calda", "Molto calda", "Estremamente calda"] },
         ndvi_class: { title: "🌿🌱 Presenza di verde", description: "Misura la quantità di vegetazione presente (valori alti = più verde).", labels: ["Assente", "Poca", "Media", "Molta"] },
-        albedo_class: { title: "☀️⬛⬛ Riflettività della superficie", description: "Indica quanto una superficie riflette la luce solare: bianco riflette, nero assorbe.", labels: ["Molto riflettente", "Riflettente", "Assorbente", "Molto assorbente"] },
+        albedo_class: { title: "☀️⬛⬛ Assorbimento luce della superficie", description: "Indica quanto una superficie assorbe la luce solare: bianco riflette, nero assorbe.", labels: ["Molto assorbente", "Assorbente", "Riflettente", "Molto riflettente"] },
         heat_ret_class: { title: "🌡️⏳ Accumulo di calore", description: "Quanto una superficie trattiene il calore nel tempo. Indica dove il calore viene assorbito e rilasciato lentamente.", labels: ["Molto bassa", "Bassa", "Moderata", "Media", "Alta", "Molto alta", "Estrema"] },
         heat_veg_class: { title: "🔥🌿 Calore/Vegetazione", description: "Relazione tra calore e presenza di vegetazione. Individua dove fa caldo e manca il verde.", labels: ["Basso", "Moderato", "Alto", "Molto alto"] },
         uhei_class: { title: "🌇🔥 Esposizione complessiva", description: "Esposizione complessiva al calore urbano. Dove il rischio da calore urbano è più elevato.", labels: ["Bassa", "Media", "Alta", "Molto alta"] },
@@ -146,7 +146,8 @@ map.on('load', async () => {
     const toggleButton = document.getElementById('toggleControls');
     toggleButton.innerText = 'Nascondi';
     toggleButton.style.position = 'absolute';
-    toggleButton.style.left = '10px';
+    toggleButton.style.left = '6px';
+    document.querySelector('.controls').style.left = '6px';
     toggleButton.style.top = '60px';
     toggleButton.style.width = document.querySelector('.controls').offsetWidth + 'px';
     toggleButton.style.backgroundColor = '#ffffff';
