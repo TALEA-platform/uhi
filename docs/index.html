@@ -6,7 +6,8 @@
     <title>talea - isole di calore di Bologna</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://unpkg.com/@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="images/logo.png" />
     <style>
       body,
@@ -36,6 +37,14 @@
         width: 100%;
       }
 
+      #geocoder-container {
+        position: absolute;
+        top: 70px;
+        right: 10px;
+        z-index: 2;
+        max-width: 300px;
+      }
+
       .controls {
         position: absolute;
         top: 70px;
@@ -46,7 +55,7 @@
         border-radius: 0.5em;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         max-width: 300px;
-        border-left: 5px solid #ffc627;
+        border-left: none;
       }
 
       .legend {
@@ -72,15 +81,15 @@
         text-align: center;
       }
 
-      #toggleControls.hidden {
-        background-color: #ffc627 !important;
-        /* evidenzia con un giallo acceso */
-        color: black !important;
-        border-color: #e0a800 !important;
-      }
-
       #toggleControls {
         transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+      }
+
+      #toggleControls:focus,
+      #toggleControls:active {
+        box-shadow: none !important;
+        border-color: #6c757d !important;
+        /* grigio standard di btn-outline-secondary */
       }
     </style>
   </head>
@@ -90,7 +99,10 @@
       <img src="images/logo.png" alt="Talea logo" />
       <span>Talea - isole di calore di Bologna</span>
     </header>
+
     <div id="map"></div>
+    <div id="geocoder-container"></div>
+
     <div class="controls">
       <button class="btn btn-outline-secondary w-100 mb-2" id="toggleControls">Nascondi</button>
       <div class="controls-content">
@@ -126,11 +138,14 @@
         <div id="legend" class="legend"></div>
       </div>
     </div>
+
     <footer>
       Questa mappa è parte del progetto Talea, iniziativa per l'analisi climatica urbana e la mitigazione delle isole di
       calore.
     </footer>
-    <script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
+
+    <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.js"></script>
     <script src="https://unpkg.com/topojson@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
     <script src="js/main.js"></script>
