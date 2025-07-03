@@ -3,101 +3,25 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>talea - isole di calore di Bologna</title>
+    <title>Talea - Isole di Calore di Bologna</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet" />
     <link href="https://unpkg.com/@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="images/logo.png" />
-    <style>
-      body,
-      html {
-        height: 100%;
-        margin: 0;
-      }
-
-      header {
-        background-color: #ffffff;
-        color: black;
-        padding: 1rem 2rem;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        font-size: 1.5rem;
-      }
-
-      header img {
-        height: 40px;
-      }
-
-      #map {
-        position: absolute;
-        top: 60px;
-        bottom: 30px;
-        width: 100%;
-      }
-
-
-      .controls {
-        position: absolute;
-        top: 70px;
-        left: 10px;
-        background: white;
-        padding: 1em;
-        z-index: 1;
-        border-radius: 0.5em;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        max-width: 300px;
-        border-left: none;
-      }
-
-      .legend {
-        margin-top: 10px;
-      }
-
-      .legend-color {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-        border: 1px solid #ccc;
-      }
-
-      footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        background: #f8f9fa;
-        color: #333;
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-        text-align: center;
-      }
-
-      #toggleControls {
-        transition: background-color 0.4s, color 0.4s, border-color 0.4s;
-      }
-
-      #toggleControls:focus,
-      #toggleControls:active {
-        box-shadow: none !important;
-        border-color: #6c757d !important;
-        /* grigio standard di btn-outline-secondary */
-      }
-
-      .legend-scroll {
-        max-height: 30vh;
-        /* usa massimo 30% dell’altezza dello schermo */
-        overflow-y: auto;
-        /* abilita lo scroll verticale */
-      }
-    </style>
+    <link rel="stylesheet" href="css/main.css" />
   </head>
 
   <body>
     <header>
-      <img src="images/logo.svg" alt="Talea logo" />
-      <span>Talea - isole di calore di Bologna</span>
+      <div class="logo-title">
+        <img src="images/logo.svg" alt="Talea logo" />
+        <span>Talea - Isole di Calore di Bologna</span>
+      </div>
+      <div class="menu-links">
+        <a href="#" class="menu-link" data-bs-toggle="modal" data-bs-target="#infoModal">Info</a>
+        <a href="#" class="menu-link" data-bs-toggle="modal" data-bs-target="#cookieModal">Cookie</a>
+      </div>
     </header>
 
     <div id="map"></div>
@@ -106,14 +30,14 @@
       <button class="btn btn-outline-secondary w-100 mb-2" id="toggleControls">Nascondi</button>
       <div class="controls-content">
         <div class="mb-2">
-          Dati da temperatura di superficie da satellite - estate 2024
+          I dati sono calcolati dai satelliti Landsat e Modis per l'estate 2024.
           <label for="layerSelect" class="form-label">Scegli il layer:</label>
           <select class="form-select" id="layerSelect">
             <option value="">-- Nessuno --</option>
             <option value="z_score_class">📊🌡️ Scostamento dalla media</option>
-            <option value="delta_lst_class">🌞🌙🌡️ Escursione termica della superficie</option>
+            <option value="delta_lst_class">🌞🌙🌡️ Escursione termica</option>
             <option value="ndvi_class">🌿🌱 Presenza di verde</option>
-            <option value="albedo_class">☀️⬛ Assorbimento della superficie</option>
+            <option value="albedo_class">☀️⬛ Assorbimento</option>
             <option value="heat_ret_class">🌡️⏳ Accumulo di calore</option>
             <option value="heat_veg_class">🔥🌿 Calore/Vegetazione</option>
             <option value="uhei_class">🌇🔥 Esposizione complessiva</option>
@@ -141,14 +65,207 @@
     </div>
 
     <footer>
-      Questa mappa è parte del progetto Talea, iniziativa per l'analisi climatica urbana e la mitigazione delle isole di
-      calore.
+      Questa mappa è parte del progetto <a href="https://github.com/TALEA-platform" target="_blank"
+        rel="noopener noreferrer">TALEA Platform</a>, un’iniziativa per analizzare e mitigare le isole di calore urbane.
+      – Analisi e rappresentazione dati a cura di Maurizio Napolitano – Fondazione Bruno Kessler – Trento.
     </footer>
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Informazioni sul Progetto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+          </div>
+          <div class="modal-body">
+            <p>Questa mappa nasce nell’ambito di <strong>TALEA</strong> (Transformative Adaptation for Local
+              Environmental Action), un progetto europeo che mira a rendere le città più verdi e resilienti al
+              cambiamento climatico. Aiuta a individuare le aree più calde e vulnerabili a Bologna, per supportare
+              azioni di mitigazione come alberature o superfici più riflettenti.</p>
+
+            <h6>Cosa mostra la mappa</h6>
+            <p>La mappa permette di esplorare indicatori calcolati dai satelliti Landsat 8/9 SR e MODIS LST durante
+              l’estate 2024, nei giorni più caldi. Ogni indicatore aiuta a comprendere come il calore si accumula e
+              persiste nelle diverse zone della città.</p>
+
+            <h6>Bias e limiti dei dati</h6>
+            <p>I dati si basano sulla <strong>temperatura superficiale</strong>, che indica quanto si scaldano le
+              superfici (es. asfalto, tetti), ma non corrisponde alla temperatura percepita, perché non considera
+              ventilazione, umidità e ombreggio. La <strong>risoluzione</strong> (30-100 m per Landsat, 1 km per MODIS)
+              non rileva dettagli minuti come piccoli cortili o vicoli. Inoltre, i dati rappresentano solo alcune
+              giornate estive e potrebbero non riflettere altre condizioni meteorologiche o stagionali.</p>
+
+            <h6>Fonti dei dati</h6>
+            <ul>
+              <li><strong>Landsat 8/9 SR</strong>: temperatura superficiale (LST), vegetazione (NDVI), albedo,
+                risoluzione 30–100 m.</li>
+              <li><strong>MODIS LST</strong>: escursione termica giorno-notte (ΔLST), risoluzione 1 km.</li>
+            </ul>
+            <p>Il codice sorgente e i dati sono disponibili su
+              <a href="https://github.com/TALEA-platform/urbanheatislands" target="_blank" rel="noopener noreferrer"
+                class="d-inline-flex align-items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" fill="currentColor" class="bi bi-github"
+                  viewBox="0 0 16 16">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 
+                       .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 
+                       2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 
+                       0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 
+                       2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 
+                       2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+                GitHub
+              </a>.
+            </p>
+
+            <h6 class="mt-4">📊🌡️ Scostamento dalla media (Z-score)</h6>
+            <p class="legend-text">Indica quanto una zona si discosta dalla media delle temperature urbane.</p>
+            <ul class="legend-list">
+              <li><span class="legend-color" style="background:#313695"></span><span class="legend-label">Molto più
+                  fredda</span></li>
+              <li><span class="legend-color" style="background:#4575b4"></span><span class="legend-label">Più
+                  fredda</span></li>
+              <li><span class="legend-color" style="background:#74add1"></span><span class="legend-label">Fredda</span>
+              </li>
+              <li><span class="legend-color" style="background:#abd9e9"></span><span class="legend-label">Leggermente
+                  fredda</span></li>
+              <li><span class="legend-color" style="background:#e0f3f8"></span><span class="legend-label">Nella
+                  media</span></li>
+              <li><span class="legend-color" style="background:#fee090"></span><span class="legend-label">Leggermente
+                  calda</span></li>
+              <li><span class="legend-color" style="background:#fdae61"></span><span class="legend-label">Calda</span>
+              </li>
+              <li><span class="legend-color" style="background:#f46d43"></span><span class="legend-label">Più
+                  calda</span></li>
+              <li><span class="legend-color" style="background:#d73027"></span><span class="legend-label">Molto
+                  calda</span></li>
+              <li><span class="legend-color" style="background:#a50026"></span><span class="legend-label">Estremamente
+                  calda</span></li>
+            </ul>
+
+            <h6 class="mt-4">🌿🌱 Presenza di verde (NDVI)</h6>
+            <p class="legend-text">Misura la quantità di vegetazione presente (valori alti = più verde).</p>
+            <ul class="legend-list">
+              <li><span class="legend-color" style="background:#ffffcc"></span><span class="legend-label">Assente</span>
+              </li>
+              <li><span class="legend-color" style="background:#c2e699"></span><span class="legend-label">Poca</span>
+              </li>
+              <li><span class="legend-color" style="background:#78c679"></span><span class="legend-label">Media</span>
+              </li>
+              <li><span class="legend-color" style="background:#006837"></span><span class="legend-label">Molta</span>
+              </li>
+            </ul>
+
+            <h6 class="mt-4">☀️⬛ Assorbimento della superficie</h6>
+            <p class="legend-text">Indica quanto una superficie assorbe la luce solare: bianco riflette, nero assorbe.
+            </p>
+            <ul class="legend-list">
+              <li><span class="legend-color" style="background:#000000"></span><span class="legend-label">Molto
+                  assorbente</span></li>
+              <li><span class="legend-color" style="background:#999999"></span><span
+                  class="legend-label">Assorbente</span></li>
+              <li><span class="legend-color" style="background:#cccccc"></span><span
+                  class="legend-label">Riflettente</span></li>
+              <li><span class="legend-color" style="background:#ffffff; border:1px solid #ccc;"></span><span
+                  class="legend-label">Molto riflettente</span></li>
+            </ul>
+
+            <h6 class="mt-4">🌡️⏳ Accumulo di calore (Heat Retention Index)</h6>
+            <p class="legend-text">Quanto una superficie trattiene il calore nel tempo.</p>
+            <ul class="legend-list">
+              <li><span class="legend-color" style="background:#ffffe0"></span><span class="legend-label">Molto
+                  bassa</span></li>
+              <li><span class="legend-color" style="background:#ffe08c"></span><span class="legend-label">Bassa</span>
+              </li>
+              <li><span class="legend-color" style="background:#ffc04d"></span><span
+                  class="legend-label">Moderata</span></li>
+              <li><span class="legend-color" style="background:#ff9933"></span><span class="legend-label">Media</span>
+              </li>
+              <li><span class="legend-color" style="background:#ff6600"></span><span class="legend-label">Alta</span>
+              </li>
+              <li><span class="legend-color" style="background:#cc0000"></span><span class="legend-label">Molto
+                  alta</span></li>
+              <li><span class="legend-color" style="background:#800000"></span><span class="legend-label">Estrema</span>
+              </li>
+            </ul>
+
+            <h6 class="mt-4">🔥🌿 Calore/Vegetazione (Heat-Vegetation Index)</h6>
+            <p class="legend-text">Relazione tra calore e presenza di vegetazione: individua zone calde con poca
+              vegetazione.</p>
+            <ul class="legend-list">
+              <li><span class="legend-color" style="background:#ffffcc"></span><span class="legend-label">Basso</span>
+              </li>
+              <li><span class="legend-color" style="background:#ffeda0"></span><span
+                  class="legend-label">Moderato</span></li>
+              <li><span class="legend-color" style="background:#feb24c"></span><span class="legend-label">Alto</span>
+              </li>
+              <li><span class="legend-color" style="background:#f03b20"></span><span class="legend-label">Molto
+                  alto</span></li>
+            </ul>
+
+            <h6 class="mt-4">🌇🔥 Esposizione complessiva (UHEI)</h6>
+            <p class="legend-text">Esposizione complessiva al calore urbano.</p>
+            <ul class="legend-list">
+              <li><span class="legend-color" style="background:#ffffcc"></span><span class="legend-label">Bassa</span>
+              </li>
+              <li><span class="legend-color" style="background:#ffeda0"></span><span class="legend-label">Media</span>
+              </li>
+              <li><span class="legend-color" style="background:#fd8d3c"></span><span class="legend-label">Alta</span>
+              </li>
+              <li><span class="legend-color" style="background:#bd0026"></span><span class="legend-label">Molto
+                  alta</span></li>
+            </ul>
+
+            <h6 class="mt-4">🌞🌙🌡️ Escursione termica della superficie (ΔLST)</h6>
+            <p class="legend-text">Variazione della temperatura tra giorno e notte.</p>
+            <ul class="legend-list">
+              <li><span class="legend-color" style="background:#30123b"></span><span class="legend-label">Freddo
+                  notte</span></li>
+              <li><span class="legend-color" style="background:#4662d8"></span><span class="legend-label">Meno
+                  caldo</span></li>
+              <li><span class="legend-color" style="background:#35abf8"></span><span class="legend-label">Neutro</span>
+              </li>
+              <li><span class="legend-color" style="background:#1be5b5"></span><span class="legend-label">Leggero
+                  caldo</span></li>
+              <li><span class="legend-color" style="background:#74fe5d"></span><span class="legend-label">Moderato
+                  caldo</span></li>
+              <li><span class="legend-color" style="background:#c9ef34"></span><span class="legend-label">Caldo</span>
+              </li>
+              <li><span class="legend-color" style="background:#fbb938"></span><span class="legend-label">Piuttosto
+                  caldo</span></li>
+              <li><span class="legend-color" style="background:#f56918"></span><span class="legend-label">Molto
+                  caldo</span></li>
+              <li><span class="legend-color" style="background:#c92903"></span><span class="legend-label">Estremo</span>
+              </li>
+              <li><span class="legend-color" style="background:#7a0403"></span><span class="legend-label">Estremamente
+                  caldo</span></li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modale Cookie -->
+    <div class="modal fade" id="cookieModal" tabindex="-1" aria-labelledby="cookieModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cookieModalLabel">Cookie Policy</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+          </div>
+          <div class="modal-body">
+            <p>Questo sito non utilizza cookie di profilazione né salva alcuna informazione personale.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
     <script src="https://unpkg.com/@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.js"></script>
     <script src="https://unpkg.com/topojson@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
   </body>
 
