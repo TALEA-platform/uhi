@@ -89,22 +89,33 @@
               persiste nelle diverse zone della città.</p>
 
             <h6>Bias e limiti dei dati</h6>
-            <p>I dati si basano sulla <strong>temperatura superficiale</strong>, che indica quanto si scaldano le
+            <p>I dati si basano sulla <strong>temperatura di superficie</strong>, che indica quanto si scaldano le
               superfici (es. asfalto, tetti), ma non corrisponde alla temperatura percepita, perché non considera
               ventilazione, umidità e ombreggio. La <strong>risoluzione</strong> (30-100 m per Landsat, 1 km per MODIS)
-              non rileva dettagli minuti come piccoli cortili o vicoli. Inoltre, i dati rappresentano solo alcune
-              giornate estive e potrebbero non riflettere altre condizioni meteorologiche o stagionali.</p>
-
+              non rileva dettagli minuti come piccoli cortili o vicoli.<br />
+              Il calcolo si bassa sulla media delle temperature di superficie durante l'<strong>estate 2024</strong> e
+              sulle immagini satellitari di quel periodo con scarsa presenza di nuvole.
+            </p>
             <h6>Fonti dei dati</h6>
             <ul>
-              <li><strong>Landsat 8/9 SR</strong>: temperatura superficiale (LST), vegetazione (NDVI), albedo,
-                risoluzione 30–100 m.</li>
-              <li><strong>MODIS LST</strong>: escursione termica giorno-notte (ΔLST), risoluzione 1 km.</li>
+              <li><strong>Landsat 8/9 SR</strong>: sorvolano ogni punto dell’Italia ogni 8 giorni, grazie a orbite
+                sfalsate. Passano sopra l’Italia al mattino, nella fascia oraria 9:30 – 10:15 locali (ora solare o
+                legale a seconda del periodo).<br />
+                Rilevano la temperatura superficiale (LST) tramite il sensore termico TIRS, con risoluzione di 100 m.
+                Permettonmo di rilevare: temperatura superficiale (LST), vegetazione (NDVI), albedo con risoluzione a
+                100m<br />
+                Permettono di mappare le isole di calore urbane (UHI), identificando aree critiche (asfalto, zone poco
+                verdi).<br />
+              </li>
+              <li><strong>MODIS LST</strong>: Fornisce temperatura anche notturna, con due passaggi al giorno (giorno e
+                notte).<br />
+                Ha una risoluzione più bassa: ~1 km → ottimo per tendenze, meno per dettagli urbani.<br />
+                Permette di calcolare l'escursione termica giorno-notte (ΔLST), risoluzione 1 km.</li>
             </ul>
             <p>Il codice sorgente e i dati sono disponibili su
               <a href="https://github.com/TALEA-platform/urbanheatislands" target="_blank" rel="noopener noreferrer"
                 class="d-inline-flex align-items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" fill="currentColor" class="bi bi-github"
+                <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" fill="black" class="bi bi-github"
                   viewBox="0 0 16 16">
                   <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 
                        .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 
@@ -121,25 +132,25 @@
             <p class="legend-text">Indica quanto una zona si discosta dalla media delle temperature urbane.</p>
             <ul class="legend-list">
               <li><span class="legend-color" style="background:#313695"></span><span class="legend-label">Molto più
-                  fredda</span></li>
+                  sotto</span></li>
               <li><span class="legend-color" style="background:#4575b4"></span><span class="legend-label">Più
-                  fredda</span></li>
+                  sotto</span></li>
               <li><span class="legend-color" style="background:#74add1"></span><span class="legend-label">Fredda</span>
               </li>
               <li><span class="legend-color" style="background:#abd9e9"></span><span class="legend-label">Leggermente
-                  fredda</span></li>
+                  sotto</span></li>
               <li><span class="legend-color" style="background:#e0f3f8"></span><span class="legend-label">Nella
                   media</span></li>
               <li><span class="legend-color" style="background:#fee090"></span><span class="legend-label">Leggermente
-                  calda</span></li>
-              <li><span class="legend-color" style="background:#fdae61"></span><span class="legend-label">Calda</span>
+                  sopra</span></li>
+              <li><span class="legend-color" style="background:#fdae61"></span><span class="legend-label">Sopra</span>
               </li>
               <li><span class="legend-color" style="background:#f46d43"></span><span class="legend-label">Più
-                  calda</span></li>
+                  sopra</span></li>
               <li><span class="legend-color" style="background:#d73027"></span><span class="legend-label">Molto
-                  calda</span></li>
+                  sopra</span></li>
               <li><span class="legend-color" style="background:#a50026"></span><span class="legend-label">Estremamente
-                  calda</span></li>
+                  sopra</span></li>
             </ul>
 
             <h6 class="mt-4">🌿🌱 Presenza di verde (NDVI)</h6>
@@ -173,18 +184,18 @@
             <p class="legend-text">Quanto una superficie trattiene il calore nel tempo.</p>
             <ul class="legend-list">
               <li><span class="legend-color" style="background:#ffffe0"></span><span class="legend-label">Molto
-                  bassa</span></li>
-              <li><span class="legend-color" style="background:#ffe08c"></span><span class="legend-label">Bassa</span>
+                  basso</span></li>
+              <li><span class="legend-color" style="background:#ffe08c"></span><span class="legend-label">Basso</span>
               </li>
               <li><span class="legend-color" style="background:#ffc04d"></span><span
                   class="legend-label">Moderata</span></li>
-              <li><span class="legend-color" style="background:#ff9933"></span><span class="legend-label">Media</span>
+              <li><span class="legend-color" style="background:#ff9933"></span><span class="legend-label">Medio</span>
               </li>
-              <li><span class="legend-color" style="background:#ff6600"></span><span class="legend-label">Alta</span>
+              <li><span class="legend-color" style="background:#ff6600"></span><span class="legend-label">Alto</span>
               </li>
               <li><span class="legend-color" style="background:#cc0000"></span><span class="legend-label">Molto
-                  alta</span></li>
-              <li><span class="legend-color" style="background:#800000"></span><span class="legend-label">Estrema</span>
+                  alto</span></li>
+              <li><span class="legend-color" style="background:#800000"></span><span class="legend-label">Estremo</span>
               </li>
             </ul>
 
@@ -192,14 +203,14 @@
             <p class="legend-text">Relazione tra calore e presenza di vegetazione: individua zone calde con poca
               vegetazione.</p>
             <ul class="legend-list">
-              <li><span class="legend-color" style="background:#ffffcc"></span><span class="legend-label">Basso</span>
+              <li><span class="legend-color" style="background:#ffffcc"></span><span class="legend-label">Bassa</span>
               </li>
               <li><span class="legend-color" style="background:#ffeda0"></span><span
                   class="legend-label">Moderato</span></li>
-              <li><span class="legend-color" style="background:#feb24c"></span><span class="legend-label">Alto</span>
+              <li><span class="legend-color" style="background:#feb24c"></span><span class="legend-label">Alta</span>
               </li>
               <li><span class="legend-color" style="background:#f03b20"></span><span class="legend-label">Molto
-                  alto</span></li>
+                  alta</span></li>
             </ul>
 
             <h6 class="mt-4">🌇🔥 Esposizione complessiva (UHEI)</h6>
@@ -218,26 +229,22 @@
             <h6 class="mt-4">🌞🌙🌡️ Escursione termica della superficie (ΔLST)</h6>
             <p class="legend-text">Variazione della temperatura tra giorno e notte.</p>
             <ul class="legend-list">
-              <li><span class="legend-color" style="background:#30123b"></span><span class="legend-label">Freddo
-                  notte</span></li>
-              <li><span class="legend-color" style="background:#4662d8"></span><span class="legend-label">Meno
-                  caldo</span></li>
-              <li><span class="legend-color" style="background:#35abf8"></span><span class="legend-label">Neutro</span>
+              <li><span class="legend-color" style="background:#30123b"></span><span class="legend-label">Molto più bassa</span></li>
+              <li><span class="legend-color" style="background:#4662d8"></span><span class="legend-label">Più bassa</span></li>
+              <li><span class="legend-color" style="background:#35abf8"></span><span class="legend-label">Neutra</span>
               </li>
-              <li><span class="legend-color" style="background:#1be5b5"></span><span class="legend-label">Leggero
-                  caldo</span></li>
-              <li><span class="legend-color" style="background:#74fe5d"></span><span class="legend-label">Moderato
-                  caldo</span></li>
-              <li><span class="legend-color" style="background:#c9ef34"></span><span class="legend-label">Caldo</span>
+              <li><span class="legend-color" style="background:#1be5b5"></span><span class="legend-label">Leggermente alta</span></li>
+              <li><span class="legend-color" style="background:#74fe5d"></span><span class="legend-label">Moderatamente alta</span></li>
+              <li><span class="legend-color" style="background:#c9ef34"></span><span class="legend-label">Alta</span>
               </li>
               <li><span class="legend-color" style="background:#fbb938"></span><span class="legend-label">Piuttosto
-                  caldo</span></li>
+                  alta</span></li>
               <li><span class="legend-color" style="background:#f56918"></span><span class="legend-label">Molto
-                  caldo</span></li>
-              <li><span class="legend-color" style="background:#c92903"></span><span class="legend-label">Estremo</span>
+                  alta</span></li>
+              <li><span class="legend-color" style="background:#c92903"></span><span class="legend-label">Estrema</span>
               </li>
               <li><span class="legend-color" style="background:#7a0403"></span><span class="legend-label">Estremamente
-                  caldo</span></li>
+                  alta</span></li>
             </ul>
 
           </div>
