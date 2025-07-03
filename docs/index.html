@@ -37,13 +37,6 @@
         width: 100%;
       }
 
-      #geocoder-container {
-        position: absolute;
-        top: 70px;
-        right: 10px;
-        z-index: 2;
-        max-width: 300px;
-      }
 
       .controls {
         position: absolute;
@@ -91,6 +84,13 @@
         border-color: #6c757d !important;
         /* grigio standard di btn-outline-secondary */
       }
+
+      .legend-scroll {
+        max-height: 30vh;
+        /* usa massimo 30% dell’altezza dello schermo */
+        overflow-y: auto;
+        /* abilita lo scroll verticale */
+      }
     </style>
   </head>
 
@@ -101,7 +101,6 @@
     </header>
 
     <div id="map"></div>
-    <div id="geocoder-container"></div>
 
     <div class="controls">
       <button class="btn btn-outline-secondary w-100 mb-2" id="toggleControls">Nascondi</button>
@@ -135,7 +134,9 @@
             <label class="form-check-label">Ortofoto Bologna 2024</label>
           </div>
         </div>
-        <div id="legend" class="legend"></div>
+        <div class="legend-scroll">
+          <div id="legend" class="legend"></div>
+        </div>
       </div>
     </div>
 

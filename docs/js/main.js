@@ -1,6 +1,6 @@
 const hash = window.location.hash;
 let initialCenter = [11.34, 44.49];
-let initialZoom = 11;
+let initialZoom = 10;
 
 // Parsing dell'hash: #zoom/lat/lon/fgLayerIndex/bgLayerIndex
 if (hash && /^#([\d.]+)\/([-.\d]+)\/([-.\d]+)(?:\/(\d+)\/(\d+))?$/.test(hash)) {
@@ -24,7 +24,7 @@ if (hash && /^#([\d.]+)\/([-.\d]+)\/([-.\d]+)(?:\/(\d+)\/(\d+))?$/.test(hash)) {
 
 const map = new maplibregl.Map({
     container: 'map',
-    style: 'https://tiles.openfreemap.org/styles/liberty', // Basemap vettoriale iniziale
+    style: 'https://tiles.openfreemap.org/styles/liberty',
     center: initialCenter,
     zoom: initialZoom,
     minZoom: 8,
@@ -127,12 +127,24 @@ map.on('load', () => {
             };
         }
     });
-    map.addControl(geocoder, 'top-right'); // 1️⃣ geocoder
-    map.addControl(new maplibregl.NavigationControl(), 'top-right'); // 2️⃣ zoom
-    map.addControl(new maplibregl.GeolocateControl({ // 3️⃣ geolocalizzazione
+    map.addControl(geocoder, 'top-right');
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.addControl(new maplibregl.GeolocateControl({
         positionOptions: { enableHighAccuracy: true },
         trackUserLocation: true
     }), 'top-right');
+
+    const toggleButton = document.getElementById('toggleControls');
+    let controlsVisible = true;
+    toggleButton.addEventListener('click', () => {
+        const controlsContent = document.querySelector('.controls-content');
+        if (!controlsContent) return;
+        controlsContent.classList.toggle('d-none');
+        controlsVisible = !controlsVisible;
+        toggleButton.innerText = controlsVisible ? 'Nascondi' : 'Mostra legenda';
+        toggleButton.setAttribute('title', controlsVisible ? 'Nascondi la legenda' : 'Mostra la legenda');
+        toggleButton.classList.toggle('hidden', !controlsVisible);
+    });
 });
 
 document.getElementById('layerSelect').addEventListener('change', function () {
@@ -153,7 +165,7 @@ document.getElementById('opacityRange').addEventListener('input', function () {
 document.querySelectorAll('input[name="basemap"]').forEach(r => {
     r.addEventListener('change', function () {
         if (this.value === 'osm') {
-            map.setStyle('https://tiles.openfreemap.org/styles/liberty'); // Basemap vettoriale
+            map.setStyle('https://tiles.openfreemap.org/styles/liberty');
         } else {
             map.setStyle({
                 version: 8,
