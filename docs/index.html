@@ -1,102 +1,139 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <title>talea - isole di calore di Bologna</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="images/logo.png" />
-  <style>
-    body, html { height: 100%; margin: 0; }
-    header {
-      background-color: #ffffff;
-      color: black;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 1.5rem;
-    }
-    header img { height: 40px; }
-    #map { position: absolute; top: 60px; bottom: 30px; width: 100%; }
-    .controls {
-      position: absolute;
-      top: 70px;
-      left: 10px;
-      background: white;
-      padding: 1em;
-      z-index: 1;
-      border-radius: 0.5em;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      max-width: 300px;
-      border-left: 5px solid #ffc627;
-    }
-    .legend { margin-top: 10px; }
-    .legend-color {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-right: 5px;
-      border: 1px solid #ccc;
-    }
-    footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      background: #f8f9fa;
-      color: #333;
-      font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <img src="images/logo.png" alt="Talea logo" />
-    <span>Talea - isole di calore di Bologna</span>
-  </header>
-  <div id="map"></div>
-  <button class="btn btn-outline-secondary position-absolute m-2" style="top:70px;right:10px;z-index:2;" id="toggleControls">☰</button>
-  <div class="controls">
-    <div class="mb-2">
-      I dati sono calcolati dai satelliti Landsat e Modis per l'estate 2024
-      <label for="layerSelect" class="form-label">Scegli il layer:</label>
-      <select class="form-select" id="layerSelect">
-        <option value="">-- Nessuno --</option>
-        <option value="z_score_class">📊🌡️ Scostamento dalla media</option>
-        <option value="delta_lst_class">🌞🌙🌡️ Escursione termica della superficie</option>
-        <option value="ndvi_class">🌿🌱 Presenza di verde</option>
-        <option value="albedo_class">☀️⬛  Assorbimento della superficie</option>
-        <option value="heat_ret_class">🌡️⏳ Accumulo di calore</option>
-        <option value="heat_veg_class">🔥🌿 Calore/Vegetazione</option>
-        <option value="uhei_class">🌇🔥 Esposizione complessiva</option>
-      </select>
-    </div>
-    <div class="mb-2">
-      <label for="opacityRange" class="form-label">Trasparenza:</label>
-      <input type="range" class="form-range" id="opacityRange" min="0" max="1" step="0.05" value="0.8">
-    </div>
-    <div class="mb-2">
-      <label class="form-label">Sfondo:</label><br />
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="basemap" value="osm" checked>
-        <label class="form-check-label">OpenStreetMap</label>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>talea - isole di calore di Bologna</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="images/logo.png" />
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+      }
+
+      header {
+        background-color: #ffffff;
+        color: black;
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1.5rem;
+      }
+
+      header img {
+        height: 40px;
+      }
+
+      #map {
+        position: absolute;
+        top: 60px;
+        bottom: 30px;
+        width: 100%;
+      }
+
+      .controls {
+        position: absolute;
+        top: 70px;
+        left: 10px;
+        background: white;
+        padding: 1em;
+        z-index: 1;
+        border-radius: 0.5em;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        max-width: 300px;
+        border-left: 5px solid #ffc627;
+      }
+
+      .legend {
+        margin-top: 10px;
+      }
+
+      .legend-color {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        border: 1px solid #ccc;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #f8f9fa;
+        color: #333;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        text-align: center;
+      }
+
+      #toggleControls.hidden {
+        background-color: #ffc627 !important;
+        /* evidenzia con un giallo acceso */
+        color: black !important;
+        border-color: #e0a800 !important;
+      }
+
+      #toggleControls {
+        transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <img src="images/logo.png" alt="Talea logo" />
+      <span>Talea - isole di calore di Bologna</span>
+    </header>
+    <div id="map"></div>
+    <div class="controls">
+      <button class="btn btn-outline-secondary w-100 mb-2" id="toggleControls">Nascondi</button>
+      <div class="controls-content">
+        <div class="mb-2">
+          I dati sono calcolati dai satelliti Landsat e Modis per l'estate 2024
+          <label for="layerSelect" class="form-label">Scegli il layer:</label>
+          <select class="form-select" id="layerSelect">
+            <option value="">-- Nessuno --</option>
+            <option value="z_score_class">📊🌡️ Scostamento dalla media</option>
+            <option value="delta_lst_class">🌞🌙🌡️ Escursione termica della superficie</option>
+            <option value="ndvi_class">🌿🌱 Presenza di verde</option>
+            <option value="albedo_class">☀️⬛ Assorbimento della superficie</option>
+            <option value="heat_ret_class">🌡️⏳ Accumulo di calore</option>
+            <option value="heat_veg_class">🔥🌿 Calore/Vegetazione</option>
+            <option value="uhei_class">🌇🔥 Esposizione complessiva</option>
+          </select>
+        </div>
+        <div class="mb-2">
+          <label for="opacityRange" class="form-label">Trasparenza:</label>
+          <input type="range" class="form-range" id="opacityRange" min="0" max="1" step="0.05" value="0.8">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Sfondo:</label><br />
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="basemap" value="osm" checked>
+            <label class="form-check-label">OpenStreetMap</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="basemap" value="ortofoto">
+            <label class="form-check-label">Ortofoto Bologna 2024</label>
+          </div>
+        </div>
+        <div id="legend" class="legend"></div>
       </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="basemap" value="ortofoto">
-        <label class="form-check-label">Ortofoto Bologna 2024</label>
-      </div>
     </div>
-    <div id="legend" class="legend"></div>
-  </div>
-  <footer>
-    Questa mappa è parte del progetto Talea, iniziativa per l'analisi climatica urbana e la mitigazione delle isole di calore.
-  </footer>
-<script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
-<script src="https://unpkg.com/topojson@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-<script src="js/main.js"></script>
-</body>
+    <footer>
+      Questa mappa è parte del progetto Talea, iniziativa per l'analisi climatica urbana e la mitigazione delle isole di
+      calore.
+    </footer>
+    <script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+
 </html>

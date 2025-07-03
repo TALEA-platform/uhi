@@ -1,12 +1,26 @@
 const hash = window.location.hash;
 let initialCenter = [11.34, 44.49];
 let initialZoom = 13;
-if (hash && /^#([\d.]+)\/([-.\d]+)\/([-.\d]+)$/.test(hash)) {
-    const match = hash.match(/^#([\d.]+)\/([-.\d]+)\/([-.\d]+)$/);
+
+// Parsing dell'hash: #zoom/lat/lon/fgLayerIndex/bgLayerIndex
+if (hash && /^#([\d.]+)\/([-.\d]+)\/([-.\d]+)(?:\/(\d+)\/(\d+))?$/.test(hash)) {
+    const match = hash.match(/^#([\d.]+)\/([-.\d]+)\/([-.\d]+)(?:\/(\d+)\/(\d+))?$/);
     if (match) {
-        const [, zoom, lat, lon] = match;
+        const [, zoom, lat, lon, fgIdx, bgIdx] = match;
         initialZoom = parseFloat(zoom);
         initialCenter = [parseFloat(lon), parseFloat(lat)];
+        // Imposta il layer selezionato dal menu se presente
+        if (fgIdx !== undefined) {
+            const layerSelect = document.getElementById('layerSelect');
+            if (layerSelect && layerSelect.options[fgIdx]) {
+                layerSelect.selectedIndex = parseInt(fgIdx);
+            }
+        }
+        // Imposta la basemap selezionata se presente
+        if (bgIdx !== undefined) {
+            const radios = document.querySelectorAll('input[name="basemap"]');
+            if (radios[bgIdx]) radios[bgIdx].checked = true;
+        }
     }
 }
 
@@ -46,7 +60,7 @@ map.on('load', async () => {
     const layerColors = {
         z_score_class: ["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8", "#fee090", "#fdae61", "#f46d43", "#d73027", "#a50026"],
         ndvi_class: ["#ffffcc", "#c2e699", "#78c679", "#006837"],
-        albedo_class: ["#000000", "#999999","#cccccc", "#ffffff"],
+        albedo_class: ["#000000", "#999999", "#cccccc", "#ffffff"],
         heat_ret_class: ["#ffffe0", "#ffe08c", "#ffc04d", "#ff9933", "#ff6600", "#cc0000", "#800000"],
         heat_veg_class: ["#ffffcc", "#ffeda0", "#feb24c", "#f03b20"],
         uhei_class: ["#ffffcc", "#ffeda0", "#fd8d3c", "#bd0026"],
@@ -64,7 +78,6 @@ map.on('load', async () => {
     };
 
     let currentLayer = null;
-    document.getElementById('layerSelect').value = 'delta_lst_class';
 
     document.getElementById('layerSelect').addEventListener('change', async function () {
         if (currentLayer) {
@@ -92,11 +105,11 @@ map.on('load', async () => {
         currentLayer = layer;
         drawLegend(layer);
 
-        // Calcola bbox e adatta la mappa
         const bbox = turf.bbox(geojson);
         map.fitBounds(bbox, { padding: 20 });
         const zoomLevel = map.getZoom();
         map.setMaxZoom(zoomLevel + 1);
+        updateHash();
     });
 
     document.getElementById('opacityRange').addEventListener('input', function () {
@@ -113,6 +126,7 @@ map.on('load', async () => {
                 map.addLayer({ id: 'base-ortofoto', type: 'raster', source: 'ortofoto' }, 'base-osm');
             }
             map.setLayoutProperty('base-ortofoto', 'visibility', isOSM ? 'none' : 'visible');
+            updateHash();
         });
     });
 
@@ -135,37 +149,39 @@ map.on('load', async () => {
         });
     }
 
-    // Attiva caricamento iniziale e imposta l'opacità
     document.getElementById('layerSelect').dispatchEvent(new Event('change'));
     document.getElementById('opacityRange').dispatchEvent(new Event('input'));
 
-    // Tooltip iniziale sui controlli
-    if (!localStorage.getItem('talea-controls-tooltip-shown')) {
-        const btn = document.getElementById('toggleControls');
-        btn.setAttribute('title', 'Tocca qui per nascondere/mostrare i controlli');
-        setTimeout(() => btn.removeAttribute('title'), 4000);
-        localStorage.setItem('talea-controls-tooltip-shown', '1');
-    }
-
-    // Gestione toggle controlli
     const toggleButton = document.getElementById('toggleControls');
     let controlsVisible = true;
-    toggleButton.innerText = 'Nascondi';
     toggleButton.addEventListener('click', () => {
-        const controlsEl = document.querySelector('.controls');
-        controlsEl.classList.toggle('d-none');
+        const contentEl = document.querySelector('.controls-content');
+        contentEl.classList.toggle('d-none');
         controlsVisible = !controlsVisible;
-        toggleButton.innerText = controlsVisible ? 'Nascondi' : 'Mostra';
-        toggleButton.setAttribute('title', controlsVisible ? 'Nascondi i controlli' : 'Mostra i controlli');
+        toggleButton.innerText = controlsVisible ? 'Nascondi' : 'Mostra legenda';
+        toggleButton.setAttribute('title', controlsVisible ? 'Nascondi la legenda' : 'Mostra la legenda');
+        toggleButton.classList.toggle('hidden', !controlsVisible);
     });
 });
 
+// aggiorna hash con zoom, lat, lon, layerIndex e basemapIndex
 function updateHash() {
     const center = map.getCenter();
     const zoom = map.getZoom().toFixed(2);
     const lat = center.lat.toFixed(6);
     const lon = center.lng.toFixed(6);
-    window.location.hash = `#${zoom}/${lat}/${lon}`;
+
+    const layerSelect = document.getElementById('layerSelect');
+    const fgLayerIndex = layerSelect.selectedIndex;
+
+    const basemapRadios = document.querySelectorAll('input[name="basemap"]');
+    let bgLayerIndex = 0;
+    basemapRadios.forEach((r, i) => {
+        if (r.checked) bgLayerIndex = i;
+    });
+
+    window.location.hash = `#${zoom}/${lat}/${lon}/${fgLayerIndex}/${bgLayerIndex}`;
 }
+
 map.on('moveend', updateHash);
 updateHash();
