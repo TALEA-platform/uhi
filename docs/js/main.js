@@ -39,7 +39,7 @@ map.setMaxBounds([
 map.addControl(new maplibregl.ScaleControl({
     maxWidth: 200,
     unit: 'metric'
-}), 'bottom-left');
+}), 'bottom-right');
 
 const layerColors = {
     z_score_class: ["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8", "#fee090", "#fdae61", "#f46d43", "#d73027", "#a50026"],
@@ -153,7 +153,7 @@ document.getElementById('opacityRange').addEventListener('input', function () {
 document.querySelectorAll('input[name="basemap"]').forEach(r => {
     r.addEventListener('change', function () {
         if (this.value === 'osm') {
-            map.setStyle('https://tiles.openfreemap.org/styles/liberty');
+            map.setStyle('https://tiles.openfreemap.org/styles/liberty'); // Basemap vettoriale
         } else {
             map.setStyle({
                 version: 8,
