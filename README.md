@@ -158,16 +158,17 @@ Gli indici calcolati includono:
 
 Ogni indicatore è salvato in formato `.tif` e `.geojson` (ritagliato sui confini di Bologna).
 
-| Indice | Descrizione | Nome file base |
-|--------|-------------|----------------|
-| **LST** | Temperatura della superficie | `lst_mean` |
-| **NDVI** | Indice di vegetazione | `ndvi_mean` |
-| **Albedo** | Riflettività superficiale (Liang 2001) | `albedo_mean` |
-| **Heat-Vegetation Index** | Caldo senza vegetazione | `heat_veg_index` |
-| **Heat Retention Index** | Caldo trattenuto da superfici scure | `heat_retention_index` |
-| **Z-score LST** | Deviazione dalla media | `z_score`, `z_score_class` |
-| **ΔLST (MODIS)** | Differenza giorno-notte | `delta_lst`, `delta_lst_class` |
-| **UHEI** | Esposizione termica urbana | `urban_heat_exposure_index` |
+| Indice | Descrizione | Download raster | Download vector | 
+|--------|-------------|----------------|----------------|
+| **LST** | Temperatura della superficie | [lst_mean.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/delta_lst.tif?download=) | [lst_mean.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/delta_lst.geojson?download=) |
+| **NDVI** | Indice di vegetazione | [ndvi_mean.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/ndvi_mean.tif?download=) | [ndvi_mean.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/ndvi_mean.geojson?download=) |
+| **Albedo** | Riflettività della superficie (Liang 2001) | [albedo_mean.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/albedo_mean.tif?download=) | [albedo_mean.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/albedo_mean.geojson?download=) |
+| **Heat-Vegetation Index** | Caldo senza vegetazione |  [heat_veg_index.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/heat_veg_index.tif?download=) |[heat_veg_index.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/heat_veg_index.geojson?download=) |
+| **Heat Retention Index** | Caldo trattenuto da superfici scure | heat_retention_index.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/heat_retention_index.tif?download=) |[heat_retention_index.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/heat_retention_index.geojson?download=)|
+| **Z-score LST** | Deviazione dalla media | [z_score.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/z_score.tif?download=) - [z_score_class.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/z_score_class.tif?download=) | [z_score.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/z_score.geojson?download=), [z_score_class.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/z_score_class.geojson?download=) |
+| **ΔLST (MODIS)** | Differenza giorno-notte | [delta_lst.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/delta_lst.tif?download=) - [delta_lst_class.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/delta_lst_class.tif?download=) | [delta_lst.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/delta_lst.geojson?download=) - [delta_lst_class.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/z_score_class.geojson?download=) |
+| **UHEI** | Esposizione termica urbana | [urban_heat_exposure_index.tif](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/urban_heat_exposure_index.tif?download=) | [urban_heat_exposure_index.geojson](https://github.com/TALEA-platform/urbanheatislands/raw/refs/heads/main/data/urban_heat_exposure_index.geojson?download=)|
+
 
 > 📁 I file sono disponibili sia in raster che in vettoriale, pronti per essere visualizzati su mappe o in software GIS.
 
