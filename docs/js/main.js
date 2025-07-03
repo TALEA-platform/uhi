@@ -1,8 +1,8 @@
 const hash = window.location.hash;
 let initialCenter = [11.34, 44.49];
 let initialZoom = 13;
-if (hash && /^#\d+(\.\d+)?\/[-\d.]+\/[-\d.]+$/.test(hash)) {
-    const match = hash.match(/#(\d+(?:\.\d+)?)\/(\-?\d+(?:\.\d+)?)\/(\-?\d+(?:\.\d+)?)/);
+if (hash && /^#([\d.]+)\/([-.\d]+)\/([-.\d]+)$/.test(hash)) {
+    const match = hash.match(/^#([\d.]+)\/([-.\d]+)\/([-.\d]+)$/);
     if (match) {
         const [, zoom, lat, lon] = match;
         initialZoom = parseFloat(zoom);
@@ -35,8 +35,6 @@ const map = new maplibregl.Map({
     zoom: initialZoom,
     maxZoom: 20
 });
-
-let deltaBounds = null;
 
 map.addControl(new maplibregl.NavigationControl(), 'top-right');
 map.addControl(new maplibregl.GeolocateControl({
@@ -93,6 +91,12 @@ map.on('load', async () => {
         });
         currentLayer = layer;
         drawLegend(layer);
+
+        // Calcola bbox e adatta la mappa
+        const bbox = turf.bbox(geojson);
+        map.fitBounds(bbox, { padding: 20 });
+        const zoomLevel = map.getZoom();
+        map.setMaxZoom(zoomLevel + 1);
     });
 
     document.getElementById('opacityRange').addEventListener('input', function () {
@@ -106,7 +110,7 @@ map.on('load', async () => {
             const isOSM = this.value === 'osm';
             map.setLayoutProperty('base-osm', 'visibility', isOSM ? 'visible' : 'none');
             if (!map.getLayer('base-ortofoto')) {
-                map.addLayer({ id: 'base-ortofoto', type: 'raster', source: 'ortofoto' });
+                map.addLayer({ id: 'base-ortofoto', type: 'raster', source: 'ortofoto' }, 'base-osm');
             }
             map.setLayoutProperty('base-ortofoto', 'visibility', isOSM ? 'none' : 'visible');
         });
@@ -131,11 +135,11 @@ map.on('load', async () => {
         });
     }
 
+    // Attiva caricamento iniziale e imposta l'opacità
     document.getElementById('layerSelect').dispatchEvent(new Event('change'));
+    document.getElementById('opacityRange').dispatchEvent(new Event('input'));
 
-    // Assicura che la legenda venga sempre mostrata quando un layer è selezionato
-
-
+    // Tooltip iniziale sui controlli
     if (!localStorage.getItem('talea-controls-tooltip-shown')) {
         const btn = document.getElementById('toggleControls');
         btn.setAttribute('title', 'Tocca qui per nascondere/mostrare i controlli');
@@ -143,34 +147,19 @@ map.on('load', async () => {
         localStorage.setItem('talea-controls-tooltip-shown', '1');
     }
 
+    // Gestione toggle controlli
     const toggleButton = document.getElementById('toggleControls');
-    toggleButton.innerText = 'Nascondi';
-    toggleButton.style.position = 'absolute';
-    toggleButton.style.left = '6px';
-    document.querySelector('.controls').style.left = '6px';
-    toggleButton.style.top = '60px';
-    toggleButton.style.width = document.querySelector('.controls').offsetWidth + 'px';
-    toggleButton.style.backgroundColor = '#ffffff';
-    toggleButton.style.border = '1px solid #ccc';
-    toggleButton.style.color = '#000';
-    toggleButton.style.transition = 'background-color 0.3s ease';
-    toggleButton.addEventListener('mouseenter', () => {
-        toggleButton.style.backgroundColor = '#e0f0ff';
-    });
-    toggleButton.addEventListener('mouseleave', () => {
-        toggleButton.style.backgroundColor = '#ffffff';
-    });
-    toggleButton.style.zIndex = '2';
-    // spostato in alto per evitare duplicazioni
     let controlsVisible = true;
+    toggleButton.innerText = 'Nascondi';
     toggleButton.addEventListener('click', () => {
-        const legendEl = document.querySelector('.controls');
-        legendEl.classList.toggle('d-none');
-        legendEl.style.marginTop = '30px';
+        const controlsEl = document.querySelector('.controls');
+        controlsEl.classList.toggle('d-none');
         controlsVisible = !controlsVisible;
         toggleButton.innerText = controlsVisible ? 'Nascondi' : 'Mostra';
+        toggleButton.setAttribute('title', controlsVisible ? 'Nascondi i controlli' : 'Mostra i controlli');
     });
 });
+
 function updateHash() {
     const center = map.getCenter();
     const zoom = map.getZoom().toFixed(2);
@@ -180,9 +169,3 @@ function updateHash() {
 }
 map.on('moveend', updateHash);
 updateHash();
-
-
-const bbox = turf.bbox(geojson);
-map.fitBounds(bbox, { padding: 20 });
-const zoom = map.getZoom();
-map.setMaxZoom(zoom + 1);
