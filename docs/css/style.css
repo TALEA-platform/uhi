@@ -1,0 +1,87 @@
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+    }
+
+    header {
+      background-color: #ffffff;
+      color: black;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.5rem;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-title img {
+      height: 40px;
+    }
+
+    .menu-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .menu-link {
+      color: black;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .menu-link:hover {
+      text-decoration: underline;
+    }
+
+    #map {
+      position: absolute;
+      top: 60px;
+      bottom: 30px;
+      width: 100%;
+    }
+
+    .controls {
+      position: absolute;
+      top: 70px;
+      left: 10px;
+      background: white;
+      padding: 1em;
+      z-index: 1;
+      border-radius: 0.5em;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      max-width: 300px;
+    }
+
+    .legend-scroll {
+      max-height: 30vh;
+      overflow-y: auto;
+    }
+
+    .legend {
+      margin-top: 10px;
+    }
+
+    .legend-color {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      border: 1px solid #ccc;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: #f8f9fa;
+      color: #333;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      text-align: center;
+    }
