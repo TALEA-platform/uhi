@@ -38,7 +38,7 @@ jobs:
           mkdir -p binary
           mv talea_uhi-windows.zip binary/
 
-      - name: Pull latest binaries branch
+      - name: Update binaries branch
         run: |
           git fetch origin binaries || echo "Branch binaries does not exist yet"
           git checkout -B binaries origin/binaries || git checkout -b binaries
@@ -84,7 +84,7 @@ jobs:
           mkdir -p binary
           mv talea_uhi-linux.zip binary/
 
-      - name: Pull latest binaries branch
+      - name: Update binaries branch
         run: |
           git fetch origin binaries || echo "Branch binaries does not exist yet"
           git checkout -B binaries origin/binaries || git checkout -b binaries
@@ -130,7 +130,7 @@ jobs:
           mkdir -p binary
           mv talea_uhi-macos.zip binary/
 
-      - name: Pull latest binaries branch
+      - name: Update binaries branch
         run: |
           git fetch origin binaries || echo "Branch binaries does not exist yet"
           git checkout -B binaries origin/binaries || git checkout -b binaries
