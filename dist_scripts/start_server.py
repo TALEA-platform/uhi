@@ -29,20 +29,30 @@ def start_server():
 
 if __name__ == "__main__":
     threading.Thread(target=start_server, daemon=True).start()
-    time.sleep(1)
 
-    index_path = os.path.join(site_dir, "index.html")
-    if not os.path.exists(index_path):
-        print(f"Errore: index.html non trovato in {site_dir}")
-        sys.exit(1)
-
+    # Loop per attendere che il server risponda prima di aprire il browser
+    import urllib.request
+    server_ready = False
     url = f"http://localhost:{PORT}/index.html"
-    print(f"Apro il browser su {url}")
-    webbrowser.open(url)
+    for i in range(20):  # tenta per ~5 secondi
+        try:
+            with urllib.request.urlopen(url, timeout=0.5) as response:
+                if response.status == 200:
+                    server_ready = True
+                    break
+        except Exception:
+            time.sleep(0.25)
+    
+    if not server_ready:
+        print("Attenzione: il server non ha risposto in tempo. Prova ad aprire il browser manualmente.")
+    else:
+        print(f"Apro il browser su {url}")
+        webbrowser.open(url)
 
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
         print("Server fermato.")
+
 
