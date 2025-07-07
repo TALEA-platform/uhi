@@ -1,0 +1,26 @@
+name: Build talea_uhi.exe
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pyinstaller
+      - name: Build executable
+        run: |
+          cd dist_scripts
+          pyinstaller --onefile --windowed --icon ../docs/images/talea.ico --name talea_uhi start_server.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: talea_uhi-exe
+          path: dist_scripts/dist/talea_uhi.exe
