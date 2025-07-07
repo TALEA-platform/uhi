@@ -44,14 +44,14 @@ jobs:
           git checkout -B binaries origin/binaries || git checkout -b binaries
           git pull origin binaries || echo "Nothing to pull or branch just created"
 
-      - name: Commit Windows binary
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: GitHub Actions
-          author_email: actions@github.com
-          message: "Add Windows binary talea_uhi-windows.zip"
-          add: "binary/talea_uhi-windows.zip"
-          push: --set-upstream origin binaries
+      - name: Commit and push Windows binary
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add binary/talea_uhi-windows.zip
+          git commit -m "Add Windows binary talea_uhi-windows.zip"
+          git pull --rebase origin binaries || echo "Nothing to pull or branch just created"
+          git push origin binaries
 
   build-linux:
     needs: build-windows
@@ -90,14 +90,14 @@ jobs:
           git checkout -B binaries origin/binaries || git checkout -b binaries
           git pull origin binaries || echo "Nothing to pull or branch just created"
 
-      - name: Commit Linux binary
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: GitHub Actions
-          author_email: actions@github.com
-          message: "Add Linux binary talea_uhi-linux.zip"
-          add: "binary/talea_uhi-linux.zip"
-          push: --set-upstream origin binaries
+      - name: Commit and push Linux binary
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add binary/talea_uhi-linux.zip
+          git commit -m "Add Linux binary talea_uhi-linux.zip"
+          git pull --rebase origin binaries || echo "Nothing to pull or branch just created"
+          git push origin binaries
 
   build-macos:
     needs: build-linux
@@ -136,11 +136,11 @@ jobs:
           git checkout -B binaries origin/binaries || git checkout -b binaries
           git pull origin binaries || echo "Nothing to pull or branch just created"
 
-      - name: Commit macOS binary
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: GitHub Actions
-          author_email: actions@github.com
-          message: "Add macOS binary talea_uhi-macos.zip"
-          add: "binary/talea_uhi-macos.zip"
-          push: --set-upstream origin binaries
+      - name: Commit and push macOS binary
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add binary/talea_uhi-macos.zip
+          git commit -m "Add macOS binary talea_uhi-macos.zip"
+          git pull --rebase origin binaries || echo "Nothing to pull or branch just created"
+          git push origin binaries
