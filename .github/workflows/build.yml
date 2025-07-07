@@ -1,0 +1,99 @@
+name: Build binaries for all platforms
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build Windows executable
+        run: |
+          cd dist_scripts
+          pyinstaller --onefile --windowed --icon ../docs/images/talea.ico --name talea_uhi start_server.py
+
+      - name: Create ZIP package
+        run: |
+          mkdir package
+          cp dist_scripts/dist/talea_uhi.exe package/
+          cp -r docs package/
+          powershell Compress-Archive -Path package\* -DestinationPath talea_uhi-windows.zip
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v3
+        with:
+          name: talea_uhi-windows
+          path: talea_uhi-windows.zip
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build Linux executable
+        run: |
+          cd dist_scripts
+          pyinstaller --onefile --windowed --name talea_uhi start_server.py
+
+      - name: Create ZIP package
+        run: |
+          mkdir package
+          cp dist_scripts/dist/talea_uhi package/
+          cp -r docs package/
+          zip -r talea_uhi-linux.zip package
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v3
+        with:
+          name: talea_uhi-linux
+          path: talea_uhi-linux.zip
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build macOS executable
+        run: |
+          cd dist_scripts
+          pyinstaller --onefile --windowed --name talea_uhi start_server.py
+
+      - name: Create ZIP package
+        run: |
+          mkdir package
+          cp dist_scripts/dist/talea_uhi package/
+          cp -r docs package/
+          zip -r talea_uhi-macos.zip package
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v3
+        with:
+          name: talea_uhi-macos
+          path: talea_uhi-macos.zip
