@@ -28,15 +28,21 @@ jobs:
 
       - name: Create ZIP package
         run: |
-          mkdir package
-          cp dist_scripts/dist/talea_uhi.exe package/
-          cp -r docs package/
-          powershell Compress-Archive -Path package\* -DestinationPath talea_uhi-windows.zip
+          mkdir talea_uhi
+          cp dist_scripts/dist/talea_uhi.exe talea_uhi/
+          cp -r docs talea_uhi/
+          powershell Compress-Archive -Path talea_uhi\* -DestinationPath talea_uhi-windows.zip
 
       - name: Prepare binaries directory
         run: |
           mkdir -p binary
           mv talea_uhi-windows.zip binary/
+
+      - name: Pull latest binaries branch
+        run: |
+          git fetch origin binaries || echo "Branch binaries does not exist yet"
+          git checkout -B binaries origin/binaries || git checkout -b binaries
+          git pull origin binaries || echo "Nothing to pull or branch just created"
 
       - name: Commit Windows binary
         uses: EndBug/add-and-commit@v9
@@ -45,10 +51,10 @@ jobs:
           author_email: actions@github.com
           message: "Add Windows binary talea_uhi-windows.zip"
           add: "binary/talea_uhi-windows.zip"
-          new_branch: binaries
           push: true
 
   build-linux:
+    needs: build-windows
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,15 +74,21 @@ jobs:
 
       - name: Create ZIP package
         run: |
-          mkdir package
-          cp dist_scripts/dist/talea_uhi package/
-          cp -r docs package/
-          zip -r talea_uhi-linux.zip package
+          mkdir talea_uhi
+          cp dist_scripts/dist/talea_uhi talea_uhi/
+          cp -r docs talea_uhi/
+          zip -r talea_uhi-linux.zip talea_uhi
 
       - name: Prepare binaries directory
         run: |
           mkdir -p binary
           mv talea_uhi-linux.zip binary/
+
+      - name: Pull latest binaries branch
+        run: |
+          git fetch origin binaries || echo "Branch binaries does not exist yet"
+          git checkout -B binaries origin/binaries || git checkout -b binaries
+          git pull origin binaries || echo "Nothing to pull or branch just created"
 
       - name: Commit Linux binary
         uses: EndBug/add-and-commit@v9
@@ -85,10 +97,10 @@ jobs:
           author_email: actions@github.com
           message: "Add Linux binary talea_uhi-linux.zip"
           add: "binary/talea_uhi-linux.zip"
-          new_branch: binaries
           push: true
 
   build-macos:
+    needs: build-linux
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -108,15 +120,21 @@ jobs:
 
       - name: Create ZIP package
         run: |
-          mkdir package
-          cp dist_scripts/dist/talea_uhi package/
-          cp -r docs package/
-          zip -r talea_uhi-macos.zip package
+          mkdir talea_uhi
+          cp dist_scripts/dist/talea_uhi talea_uhi/
+          cp -r docs talea_uhi/
+          zip -r talea_uhi-macos.zip talea_uhi
 
       - name: Prepare binaries directory
         run: |
           mkdir -p binary
           mv talea_uhi-macos.zip binary/
+
+      - name: Pull latest binaries branch
+        run: |
+          git fetch origin binaries || echo "Branch binaries does not exist yet"
+          git checkout -B binaries origin/binaries || git checkout -b binaries
+          git pull origin binaries || echo "Nothing to pull or branch just created"
 
       - name: Commit macOS binary
         uses: EndBug/add-and-commit@v9
@@ -125,6 +143,4 @@ jobs:
           author_email: actions@github.com
           message: "Add macOS binary talea_uhi-macos.zip"
           add: "binary/talea_uhi-macos.zip"
-          new_branch: binaries
           push: true
-
