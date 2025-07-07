@@ -23,9 +23,8 @@ jobs:
 
       - name: Build Windows executable
         run: |
-          cd $GITHUB_WORKSPACE
           cd dist_scripts
-          pyinstaller --onefile --windowed --icon ../docs/images/talea.ico --name talea_uhi start_server.py
+          pyinstaller --onefile --windowed --icon docs/images/talea.ico --name talea_uhi start_server.py
 
   build-linux:
     runs-on: ubuntu-latest
@@ -79,4 +78,12 @@ jobs:
       - name: Create ZIP package
         run: |
           mkdir package
-          cp dist_scripts/dist/talea_
+          cp dist_scripts/dist/talea_uhi package/
+          cp -r docs package/
+          zip -r talea_uhi-macos.zip package
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: talea_uhi-macos
+          path: talea_uhi-macos.zip
