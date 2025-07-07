@@ -1,4 +1,4 @@
-name: Build binaries for all platforms
+name: Build binaries for all platforms and commit ZIPs
 
 on:
   push:
@@ -11,12 +11,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Debug repo contents
-        run: |
-          echo "Current working directory: $(pwd)"
-          ls -R
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -30,6 +25,28 @@ jobs:
         run: |
           cd dist_scripts
           pyinstaller --onefile --windowed --icon ../docs/images/talea.ico --name talea_uhi start_server.py
+
+      - name: Create ZIP package
+        run: |
+          mkdir package
+          cp dist_scripts/dist/talea_uhi.exe package/
+          cp -r docs package/
+          powershell Compress-Archive -Path package\* -DestinationPath talea_uhi-windows.zip
+
+      - name: Prepare binaries directory
+        run: |
+          mkdir -p binary
+          mv talea_uhi-windows.zip binary/
+
+      - name: Commit Windows binary
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          message: "Add Windows binary talea_uhi-windows.zip"
+          add: "binary/talea_uhi-windows.zip"
+          new_branch: binaries
+          push: true
 
   build-linux:
     runs-on: ubuntu-latest
@@ -56,11 +73,20 @@ jobs:
           cp -r docs package/
           zip -r talea_uhi-linux.zip package
 
-      - name: Upload ZIP
-        uses: actions/upload-artifact@v4
+      - name: Prepare binaries directory
+        run: |
+          mkdir -p binary
+          mv talea_uhi-linux.zip binary/
+
+      - name: Commit Linux binary
+        uses: EndBug/add-and-commit@v9
         with:
-          name: talea_uhi-linux
-          path: talea_uhi-linux.zip
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          message: "Add Linux binary talea_uhi-linux.zip"
+          add: "binary/talea_uhi-linux.zip"
+          new_branch: binaries
+          push: true
 
   build-macos:
     runs-on: macos-latest
@@ -87,9 +113,18 @@ jobs:
           cp -r docs package/
           zip -r talea_uhi-macos.zip package
 
-      - name: Upload ZIP
-        uses: actions/upload-artifact@v4
+      - name: Prepare binaries directory
+        run: |
+          mkdir -p binary
+          mv talea_uhi-macos.zip binary/
+
+      - name: Commit macOS binary
+        uses: EndBug/add-and-commit@v9
         with:
-          name: talea_uhi-macos
-          path: talea_uhi-macos.zip
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          message: "Add macOS binary talea_uhi-macos.zip"
+          add: "binary/talea_uhi-macos.zip"
+          new_branch: binaries
+          push: true
 
