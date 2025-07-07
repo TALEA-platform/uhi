@@ -13,6 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Debug repo contents
+        run: |
+          echo "Current working directory: $(pwd)"
+          ls -R
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -24,7 +29,7 @@ jobs:
       - name: Build Windows executable
         run: |
           cd dist_scripts
-          pyinstaller --onefile --windowed --icon docs/images/talea.ico --name talea_uhi start_server.py
+          pyinstaller --onefile --windowed --icon ../docs/images/talea.ico --name talea_uhi start_server.py
 
   build-linux:
     runs-on: ubuntu-latest
@@ -87,3 +92,4 @@ jobs:
         with:
           name: talea_uhi-macos
           path: talea_uhi-macos.zip
+
