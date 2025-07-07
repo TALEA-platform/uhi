@@ -7,6 +7,9 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v3
 
@@ -20,7 +23,6 @@ jobs:
 
       - name: Build Windows executable
         run: |
-          cd $GITHUB_WORKSPACE
           cd dist_scripts
           pyinstaller --onefile --windowed --icon docs/images/talea.ico --name talea_uhi start_server.py
 
@@ -85,4 +87,3 @@ jobs:
         with:
           name: talea_uhi-macos
           path: talea_uhi-macos.zip
-
