@@ -1,7 +1,7 @@
 [🇮🇹 Versione in italiano qui](#-versione-in-italiano)
 ---
 
-# 🌡️ Urban Heat Island Analysis – Bologna
+# 🌡️ Surface Urban Heat Island Analysis – Bologna
 ## 🇬🇧 English version
 This project analyzes Urban Heat Island (UHI) effects in the city of Bologna (Italy) by processing and integrating satellite data (Landsat, MODIS) with spatial indicators like [NDVI](https://it.wikipedia.org/wiki/Normalized_Difference_Vegetation_Index), LST - Land Surface Temperature, [Albedo](https://en.wikipedia.org/wiki/Albedo), and derived composite indices.
 
@@ -59,7 +59,7 @@ This analysis supports:
 ---
 [🇬🇧 English version here](#english)
 
-# 🌡️ Analisi Isole di Calore Urbana – Bologna
+# 🌡️ Analisi Isole di Calore di Superficie Urbana – Bologna
 ## 🇮🇹 Versione in italiano
 
 Questo progetto analizza **come il calore si accumula e persiste** in diverse zone della città di Bologna durante l’estate, utilizzando **dati satellitari aperti** provenienti da Landsat 8/9 e MODIS.  
